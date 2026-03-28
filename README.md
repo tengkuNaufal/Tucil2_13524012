@@ -151,4 +151,4 @@ Lama waktu eksekusi     : 150 ms
 
 **Institut Teknologi Bandung**  
 Tugas Kecil 2 - IF2211 Strategi Algoritma  
-Semester 4 - 2024/2025
+Semester 4 - 2025/2026
