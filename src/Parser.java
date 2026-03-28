@@ -35,16 +35,6 @@ public class Parser {
         }
     }
     
-    /**
-     * Parse file OBJ dengan penanganan error yang lebih robust.
-     * Mendukung:
-     * - Face dengan format v/vt/vn (texture coords & normals diabaikan)
-     * - Quad faces (otomatis di-triangulasi)
-     * - N-gon faces (otomatis di-triangulasi dengan fan triangulation)
-     * - Skip baris yang tidak dikenal dengan warning (bukan error)
-     * - Handling NumberFormatException dengan pesan yang jelas
-     * - Negative vertex indices (relative indexing)
-     */
     public static Mesh parseOBJ(String path) throws IOException {
         ParseResult result = parseOBJWithWarnings(path);
         result.printWarnings();
@@ -237,10 +227,6 @@ public class Parser {
         }
     }
     
-    /**
-     * Parse face vertex index dengan support untuk format v/vt/vn.
-     * Mendukung negative indices (relative indexing).
-     */
     private static int parseFaceIndex(String token, int currentVertexCount, int lineNumber) 
             throws OBJParseException {
         
@@ -321,13 +307,11 @@ public class Parser {
         for (int i = 0; i < mesh.getFaces().size(); i++) {
             Face f = mesh.getFaces().get(i);
             
-            // Check for null face
             if (f == null) {
                 errors.add("Face " + i + " is null");
                 continue;
             }
 
-            // Validate vertex indices
             if (f.a < 0 || f.a >= vertexCount) {
                 errors.add("Face " + i + ": vertex A index " + f.a + " out of range [0, " + (vertexCount - 1) + "]");
             }
@@ -338,12 +322,10 @@ public class Parser {
                 errors.add("Face " + i + ": vertex C index " + f.c + " out of range [0, " + (vertexCount - 1) + "]");
             }
             
-            // Check for degenerate faces (duplicate indices)
             if (f.a == f.b || f.b == f.c || f.a == f.c) {
                 errors.add("Face " + i + ": degenerate face with duplicate vertex indices (" + f.a + ", " + f.b + ", " + f.c + ")");
             }
             
-            // Limit error output
             if (errors.size() >= 10) {
                 errors.add("... and more errors (showing first 10 only)");
                 break;
@@ -359,9 +341,6 @@ public class Parser {
         }
     }
     
-    /**
-     * Custom exception untuk parsing OBJ dengan flag fatal/non-fatal.
-     */
     private static class OBJParseException extends Exception {
         private final boolean fatal;
         

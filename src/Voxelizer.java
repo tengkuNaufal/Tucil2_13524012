@@ -5,7 +5,6 @@ public class Voxelizer {
     public enum StatusCube {
         OUTSIDE,
         INTERSECTING,
-        INSIDE        
     }
 
     public static List<Voxel> voxelize(Mesh mesh, OctreeNode root, int maxDepth, Statistics stats){
@@ -24,7 +23,6 @@ public class Voxelizer {
                 stats.incrementPruned(node.depth);
                 return;
 
-            case INSIDE:
             case INTERSECTING:
                 if (node.depth == maxDepth) {
                     voxels.add(new Voxel(node.bounds));
